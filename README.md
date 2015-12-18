@@ -3,7 +3,7 @@
 Create a simple CLI that allows the user to:
 
 1. Establish and describe an asymmetrical social graph with a series of one-line commands.
-2. Determine the **extended** influence of any particular person in the graph (ie total count of followers and followers of followers etc of that person).
+2. Determine the **extended** influence of any particular person in the graph (i.e. total count of followers and followers of followers etc of that person).
 
 ### Commands
 
@@ -86,12 +86,12 @@ Victor Valdes has 4 followers
 ```
 
 ### Questions
-As part of your assignment, please answer these quesitons:
+As part of your assignment, please answer these questions:
 
 1. How have you gained confidence in your code?
-  * *I got to use a few new things that I haven't used before, including the Files class and the Command pattern (without the Invoker layer).  It's also nice to write more functional style code which I'm relatively new to.*
+  * *I got to use a few new things that I haven't used before, including the Files class and the Command pattern (without the Invoker layer).  It's also nice to write more functional style code which I'm relatively new to.  The greatest take-away from this assignment is to do more work with graphs.  I learned about the concept of a Directed Pseudoforest (https://en.wikipedia.org/wiki/Pseudoforest) which is very cool. *
 2. What are the performance characteristics of your implementation? Does it perform some operations faster than others? Explain any tradeoffs you made in architecting your solution.
-  * *Please see the Runtime Analysis section below.*
+  * *Please see the **Runtime Analysis** section below.*
 3. One of the things we'll be evaluating is how your code is organized. Why did you choose the structure that you did? What principles were important to you as you organized this code?
 
 | Concept | Reasoning |
@@ -116,14 +116,20 @@ As part of your assignment, please answer these quesitons:
 * Reach out if you have any questions and document where you have made assumptions!
 
 # Assumptions:
-* 
+* It's stated above, but that I would be able to hold the entire graph in memory.
+* That cycles can exist, specifically, if Anthony follows Steve and Steve follows Anthony then each Person has a Clout of 1.
+* Names are case sensitive and spaces are supported.
+* Empty or null names are not supported.
 
 # Approach:
-  - 
-
+  - I wanted my code to be as performant as possible and I was willing to use/tradeoff more memory for the internal representation of the graph details to optimize for better runtime.
+  - I also wanted to support cycles since I found that to be the most interesting part of this problem.  In particular, the creation of cycles and the breaking of cycles are the non-trivial scenarios.
+  
 # Runtime Analysis:
 ##Definitions:
-  - 
+  - N is the number of people in the entire Clout graph.
+  - C is the number of people in a cycle if it's relevant.
+  - H is the number of "ancestors" of a specific person, where if the entire graph represents "Anthony follows Steve" then Anthony has 1 ancestor and Steve has none.
 
 ##Breakdown:
   - 
@@ -132,7 +138,7 @@ As part of your assignment, please answer these quesitons:
   - Space: 
   - Time: 
 
-# Tags: 
+# Tags: Graphs, Directed Pseudoforests, Corrective Pass, Cycles
 
 # Notes:
   - 
