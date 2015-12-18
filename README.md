@@ -147,6 +147,7 @@ There are two scripts available to run the program from inside the "scripts" fol
 
 ##Breakdown:
   1. Removing an Edge
+    - Edge removal currently requires a cycle detection pass which can take up to O(A) from the target time and space.  Please add this cost to the runtimes below.
     1. From a Tree Component
       - O(A) from the target
     2. From a Tree Component that is connected to a Cycle
