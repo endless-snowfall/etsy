@@ -4,7 +4,6 @@ import static com.etsy.clout.common.TestUtils.People.*;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class CloutServiceImplTest {
@@ -93,7 +92,7 @@ public class CloutServiceImplTest {
         assertEquals(1, cloutService.getClout(DAVE));
     }
 
-    @Ignore
+    @Test
     public void follows_TwoPersonCycle() {
         cloutService.follows(ANTHONY, MIKE);
         cloutService.follows(MIKE, ANTHONY);
@@ -102,7 +101,7 @@ public class CloutServiceImplTest {
         assertEquals(1, cloutService.getClout(MIKE));
     }
 
-    @Ignore
+    @Test
     public void follows_ThreePersonCycle() {
         cloutService.follows(ANTHONY, MIKE);
         cloutService.follows(MIKE, DAVE);
