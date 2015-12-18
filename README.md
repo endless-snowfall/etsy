@@ -96,7 +96,14 @@ As part of your assignment, please answer these quesitons:
 
 | Concept | Reasoning |
 | ------- | --------- |
-| blah | blah |
+| Person | I wanted to create this wrapping on a String to give some domain terminology in the code and to avoid the confusion involved with passing primitive Strings around. |
+| User Interface | I wanted to both have a Command Line Interface and a way to pump in an input file and generate an output file so I wouldn't have to type every line out against a prompt. |
+| Clout Service | I created this interface since there could be different approaches and internal representations of the clout graph.  This interface defines a contract which alternative implementations must adhere to. |
+| Response | At first when I didn't have this concept, I printed the console output inside the Command layer.  I could have probably mocked something to assert on but decided to wrap the actual Strings in this concept so that I could more explicitly assert against them in my unit tests. |
+| Command Pattern | I've never used this pattern before and though it would fit the problem as there are intuitively a Follow and a Clout command.  I also added an Exit command for a way to exit the Command Line Interface. I decided to not utilize a Command Invoker abstraction which I found used in some examples of this pattern because it seemed like a redundant layer of abstraction. |
+| Factory Pattern | Where appropriate I've used this pattern to decouple the construction knowledge and also to isolate that logic for unit testing, which has been omitted. |
+| Optionals | I've used Optionals in some places, for example in the CloutCommand, because it was a clean way to differentiate between a Clout Command for a single Person versus everybody. |
+| Integration Testing | I wanted to separate the unit testing from more complex scenarios which were integration-level testing. There are a number of interesting and important test cases relating to cycles that I wanted to ensure my code supported. |
 
 ### Guidelines
 
