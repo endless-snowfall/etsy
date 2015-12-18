@@ -123,7 +123,7 @@ As part of your assignment, please answer these questions:
 * Empty or null names are not supported.
 
 # Running the Program:
-There are two scripts available to run the program in the "scripts" folder:
+There are two scripts available to run the program from inside the "scripts" folder:
 
 | Script | Description |
 | ------ | ----------- |
