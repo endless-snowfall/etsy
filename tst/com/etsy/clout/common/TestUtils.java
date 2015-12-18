@@ -25,7 +25,6 @@ public class TestUtils {
         public static final Person JAKE = Person.of("Jake");
         public static final Person BILL = Person.of("Bill");
         public static final Person TED = Person.of("Ted");
-        public static final Person JASON = Person.of("Jason");
 
         public static final Person DUDE = Person.of("Dude");
     }
@@ -63,11 +62,13 @@ public class TestUtils {
         cloutService.follows(MESSI, JAKE);
         cloutService.follows(JAKE, BILL);
         cloutService.follows(BILL, MESSI);
+        cloutService.follows(TED, MESSI);
 
         Map<Person, Integer> expected = ImmutableMap.of(
-            MESSI, 2,
-            JAKE, 2,
-            BILL, 2);
+            MESSI, 3,
+            JAKE, 3,
+            BILL, 3,
+            TED, 0);
 
         assertExpected(cloutService, expected);
         return expected;

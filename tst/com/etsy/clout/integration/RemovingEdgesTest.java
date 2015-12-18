@@ -25,7 +25,6 @@ public class RemovingEdgesTest {
     @Test
     public void removeEdge_From_TreeComponent() {
         Map<Person, Integer> anthonyTreeClout = createAnthonyRootedTreeComponent(cloutService);
-
         cloutService.follows(BOB, DUDE);
 
         int decrease = cloutService.getClout(BOB) + 1;
@@ -36,28 +35,30 @@ public class RemovingEdgesTest {
 
     @Test
     public void removeEdge_From_TreeComponent_ConnectedTo_CycleComponent() {
-        Map<Person, Integer> anthonyTreeClout = createAnthonyRootedTreeComponent(cloutService);
-        Map<Person, Integer> cycleClout = createCycleComponent(cloutService);
+        createCycleComponent(cloutService);
+        cloutService.follows(TED, DUDE);
 
-        cloutService.follows(ANTHONY, MESSI);
+        Map<Person, Integer> expected = ImmutableMap.of(
+            BILL, 2,
+            JAKE, 2,
+            MESSI, 2,
+            DUDE, 1,
+            TED, 0);
 
-        int increase = cloutService.getClout(ANTHONY) + 1;
-        assertIncreased(cloutService, cycleClout, increase, MESSI, JAKE, BILL);
-        assertUnchanged(cloutService, anthonyTreeClout, ANTHONY, MIKE, BOB);
+        assertExpected(cloutService, expected);
     }
 
     @Test
     public void removeEdge_From_CycleComponent() {
-        Map<Person, Integer> cycleClout = createCycleComponent(cloutService);
-
-        int formerCycleClout = cycleClout.get(MESSI);
+        createCycleComponent(cloutService);
         cloutService.follows(MESSI, DUDE);
 
         Map<Person, Integer> expected = ImmutableMap.of(
-            DUDE, 1,
-            MESSI, formerCycleClout,
+            DUDE, 4,
+            MESSI, 3,
             BILL, 1,
-            JAKE, 0);
+            JAKE, 0,
+            TED, 0);
 
         assertExpected(cloutService, expected);
     }

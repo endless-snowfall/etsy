@@ -1,9 +1,11 @@
 package com.etsy.clout.service;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.etsy.clout.concepts.Cycle;
 import com.etsy.clout.concepts.Person;
@@ -56,28 +58,25 @@ public class CloutServiceImpl implements CloutService {
         follows.remove(source, target);
 
         if (cycles.containsKey(source)) {
-            removeCycleEdge(source, target);
+            removeCycleEdge(target);
         } else {
             removeNonCycleEdge(source, target);
         }
     }
 
-    private void removeCycleEdge(Person source, Person target) {
-        Cycle cycle = cycles.get(source);
-
-        for (Person person : cycle.getPeople()) {
-            cycles.remove(person);
-        }
+    private void removeCycleEdge(Person target) {
+        Cycle cycle = cycles.get(target);
 
         int startIndex = cycle.getPeople().indexOf(target);
         int cycleLength = cycle.getPeople().size();
         int accumulatedClout = 0;
 
-        for (int i = startIndex; i < cycleLength - 1; i++) {
-            Person person = cycle.getPeople().get(i % cycleLength);
+        for (int i = 0; i < cycleLength; i++) {
+            Person person = cycle.getPeople().get((i + startIndex) % cycleLength);
+            cycles.remove(person);
             int nonCycleCloutValue = nonCycleClout.get(person);
             nonCycleClout.put(person, nonCycleCloutValue + accumulatedClout);
-            accumulatedClout += nonCycleCloutValue;
+            accumulatedClout += nonCycleCloutValue + 1;
         }
     }
 
@@ -101,18 +100,17 @@ public class CloutServiceImpl implements CloutService {
     private void addEdge(Person source, Person target) {
         nonCycleClout.putIfAbsent(source, 0);
         int sourceClout = nonCycleClout.get(source);
-        follows.put(source, target);
+
+        if (willCreateCycle(source, target)) {
+            createCycle(target, sourceClout);
+            follows.put(source, target);
+            return;
+        }
 
         int cloutToAdd = sourceClout + 1;
         Person current = target;
 
         while (current != null) {
-            // created a cycle
-            if (current.equals(source)) {
-                createCycleAndCorrectCycleClout(target, sourceClout);
-                break;
-            }
-
             nonCycleClout.put(current, nonCycleClout.getOrDefault(current, 0) + cloutToAdd);
 
             if (cycles.containsKey(current)) {
@@ -123,18 +121,42 @@ public class CloutServiceImpl implements CloutService {
 
             current = follows.get(current);
         }
+        follows.put(source, target);
     }
 
-    private void createCycleAndCorrectCycleClout(Person start, int cycleClout) {
+    private void createCycle(Person start, int cycleClout) {
         List<Person> people = new LinkedList<>();
         Cycle cycle = new Cycle(cycleClout, people);
         Person current = start;
+        int accumulatedClout = 0;
 
-        do {
+        while (current != null) {
             people.add(current);
-            nonCycleClout.put(current, nonCycleClout.get(current) - cycleClout);
+            int nonCycleCloutValue = nonCycleClout.get(current);
+            nonCycleClout.put(current, nonCycleCloutValue - accumulatedClout);
+            accumulatedClout = nonCycleCloutValue + 1;
             cycles.put(current, cycle);
             current = follows.get(current);
-        } while (current != start);
+        }
+    }
+
+    private boolean willCreateCycle(Person start, Person target) {
+        Set<Person> seen = new HashSet<>();
+        Person current = target;
+
+        while (current != null) {
+            if (follows.get(current) == start) {
+                return true;
+            }
+
+            if (seen.contains(current)) {
+                return false;
+            }
+
+            seen.add(current);
+            current = follows.get(current);
+        }
+
+        return false;
     }
 }
