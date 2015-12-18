@@ -122,6 +122,13 @@ As part of your assignment, please answer these questions:
 * Names are case sensitive and spaces are supported.
 * Empty or null names are not supported.
 
+# Running the Program:
+There are two scripts available to run the program in the "scripts" folder:
+| Script | Description |
+| ------ | ----------- |
+| clout | Standard CLI |
+| clout-input-output-file | Allows you to specific the full file path for an input file and generates an inlined output file.  Samples can be found in the "input" and "output" folders.  An example usage would be ./clout-input-output-file /etsy/input/sample.in /etsy/output/sample.out |
+
 # Approach:
   - I wanted my code to be as performant as possible and I was willing to use/tradeoff more memory for the internal representation of the graph details to optimize for better runtime.
   - I also wanted to support cycles since I found that to be the most interesting part of this problem.  In particular, the creation of cycles and the breaking of cycles are the non-trivial scenarios.
