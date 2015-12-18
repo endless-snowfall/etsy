@@ -3,16 +3,18 @@ package com.etsy.clout.service;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.etsy.clout.concepts.Cycle;
 import com.etsy.clout.concepts.Person;
 
 public class CloutServiceImpl implements CloutService {
 
     private Map<Person, Person> follows = new HashMap<>();
     private Map<Person, Integer> nonCycleClout = new HashMap<>();
+    private Map<Person, Cycle> cycles = new HashMap<>();
 
     @Override
     public void follows(Person source, Person target) {
-        if (isAlreadyFollowing(source, target)) {
+        if (isSamePerson(source, target) || isAlreadyFollowing(source, target)) {
             return;
         }
 
@@ -32,6 +34,10 @@ public class CloutServiceImpl implements CloutService {
     @Override
     public Map<Person, Integer> getAllClout() {
         return nonCycleClout;
+    }
+
+    private boolean isSamePerson(Person source, Person target) {
+        return source.equals(target);
     }
 
     private boolean isAlreadyFollowing(Person source, Person target) {

@@ -17,7 +17,20 @@ public class CloutServiceImplTest {
     }
 
     @Test
-    public void follows_Double() {
+    public void getClout_UnknownPerson() {
+        assertTrue(cloutService.getAllClout().isEmpty());
+        assertEquals(0, cloutService.getClout(ANTHONY));
+    }
+
+    @Test
+    public void follows_Self() {
+        cloutService.follows(ANTHONY, ANTHONY);
+
+        assertEquals(0, cloutService.getClout(ANTHONY));
+    }
+
+    @Test
+    public void follows_TwoPersonLine() {
         cloutService.follows(ANTHONY, MIKE);
 
         assertEquals(0, cloutService.getClout(ANTHONY));
@@ -25,13 +38,32 @@ public class CloutServiceImplTest {
     }
 
     @Test
-    public void follows_Triple() {
+    public void follows_TwoPersonLine_AlreadyFollowing() {
         cloutService.follows(ANTHONY, MIKE);
-        cloutService.follows(MIKE, BOB);
+        cloutService.follows(ANTHONY, MIKE);
 
         assertEquals(0, cloutService.getClout(ANTHONY));
         assertEquals(1, cloutService.getClout(MIKE));
-        assertEquals(2, cloutService.getClout(BOB));
+    }
+
+    @Test
+    public void follows_ThreePersonLine_Inwards() {
+        cloutService.follows(MIKE, DAVE);
+        cloutService.follows(ANTHONY, MIKE);
+
+        assertEquals(0, cloutService.getClout(ANTHONY));
+        assertEquals(1, cloutService.getClout(MIKE));
+        assertEquals(2, cloutService.getClout(DAVE));
+    }
+
+    @Test
+    public void follows_ThreePersonLine_Outwards() {
+        cloutService.follows(ANTHONY, MIKE);
+        cloutService.follows(MIKE, DAVE);
+
+        assertEquals(0, cloutService.getClout(ANTHONY));
+        assertEquals(1, cloutService.getClout(MIKE));
+        assertEquals(2, cloutService.getClout(DAVE));
     }
 
     @Test
@@ -62,11 +94,22 @@ public class CloutServiceImplTest {
     }
 
     @Ignore
-    public void follows_Cycle() {
+    public void follows_TwoPersonCycle() {
         cloutService.follows(ANTHONY, MIKE);
         cloutService.follows(MIKE, ANTHONY);
 
         assertEquals(1, cloutService.getClout(ANTHONY));
         assertEquals(1, cloutService.getClout(MIKE));
+    }
+
+    @Ignore
+    public void follows_ThreePersonCycle() {
+        cloutService.follows(ANTHONY, MIKE);
+        cloutService.follows(MIKE, DAVE);
+        cloutService.follows(DAVE, ANTHONY);
+
+        assertEquals(2, cloutService.getClout(ANTHONY));
+        assertEquals(2, cloutService.getClout(MIKE));
+        assertEquals(2, cloutService.getClout(DAVE));
     }
 }
