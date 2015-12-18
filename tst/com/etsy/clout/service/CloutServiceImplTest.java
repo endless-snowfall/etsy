@@ -3,8 +3,13 @@ package com.etsy.clout.service;
 import static com.etsy.clout.common.TestUtils.People.*;
 import static org.junit.Assert.*;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import com.etsy.clout.concepts.Person;
+import com.google.common.collect.ImmutableMap;
 
 public class CloutServiceImplTest {
 
@@ -86,10 +91,13 @@ public class CloutServiceImplTest {
 
         cloutService.follows(MIKE, DAVE);
 
-        assertEquals(0, cloutService.getClout(ANTHONY));
-        assertEquals(0, cloutService.getClout(MIKE));
-        assertEquals(1, cloutService.getClout(BOB));
-        assertEquals(1, cloutService.getClout(DAVE));
+        Map<Person, Integer> expected = ImmutableMap.of(
+            ANTHONY, 0,
+            MIKE, 0,
+            BOB, 1,
+            DAVE, 1);
+
+        assertEquals(expected, cloutService.getAllClout());
     }
 
     @Test
@@ -103,12 +111,15 @@ public class CloutServiceImplTest {
 
     @Test
     public void follows_ThreePersonCycle() {
+        Map<Person, Integer> expected = ImmutableMap.of(
+            ANTHONY, 2,
+            MIKE, 2,
+            DAVE, 2);
+
         cloutService.follows(ANTHONY, MIKE);
         cloutService.follows(MIKE, DAVE);
         cloutService.follows(DAVE, ANTHONY);
 
-        assertEquals(2, cloutService.getClout(ANTHONY));
-        assertEquals(2, cloutService.getClout(MIKE));
-        assertEquals(2, cloutService.getClout(DAVE));
+        assertEquals(expected, cloutService.getAllClout());
     }
 }

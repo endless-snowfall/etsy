@@ -137,7 +137,7 @@ There are two scripts available to run the program from inside the "scripts" fol
     1. The edges between each "follower" and who they are "following".
     2. All of the cycles that exist in the graph.
     3. All of the people that are part of a cycle.
-    4. The Non-cycle Clout for every Person, where for a Person that is not part of a cycle, it is simply their Clout.  And for a Person that is in a cycle, it would be their Clout if they were detached from that cycle.
+    4. The Non-cycle Clout for every Person, where for a Person that is not part of a cycle, it is simply their Clout.  And for a Person that is in a cycle, it would be their Clout if the cycle did not exist.
   
 # Runtime Analysis:
 ##Definitions:

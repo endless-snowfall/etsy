@@ -99,10 +99,12 @@ public class CloutServiceImpl implements CloutService {
     }
 
     private void addEdge(Person source, Person target) {
-        Integer sourceClout = nonCycleClout.getOrDefault(source, 0);
+        nonCycleClout.putIfAbsent(source, 0);
+        int sourceClout = nonCycleClout.get(source);
+        follows.put(source, target);
+
         int cloutToAdd = sourceClout + 1;
         Person current = target;
-        follows.put(source, target);
 
         while (current != null) {
             // created a cycle
@@ -128,11 +130,11 @@ public class CloutServiceImpl implements CloutService {
         Cycle cycle = new Cycle(cycleClout, people);
         Person current = start;
 
-        while (follows.get(current) != start) {
+        do {
             people.add(current);
             nonCycleClout.put(current, nonCycleClout.get(current) - cycleClout);
             cycles.put(current, cycle);
             current = follows.get(current);
-        }
+        } while (current != start);
     }
 }
