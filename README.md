@@ -140,12 +140,18 @@ As part of your assignment, please answer these questions:
 ##Breakdown:
   1. Removing an Edge
     1. From a Tree Component
+      - O(A) from the target
     2. From a Tree Component that is connected to a Cycle
+      - Bounded by path from the target to the first node that is part of the cycle.
     3. From a Cycle itself
+      - O(2C), as we are breaking the cycle we need to remove the "cycles" map entries as well as correct the non-cycle clout for each member of the former cycle.
   2. Adding an Edge
     1. To a different Tree Component
+      - O(A) from the target
     2. To a different Tree Component that is connected to a Cycle
+      - Bounded by path from the target to the first node that is part of the cycle.
     3. To the same Tree Component (creating a Cycle)
+      - O(3C), as we are creating a cycle we did one pass that needs to be "corrected" by a second pass.
 
 ##Overall:
   - Space: 
