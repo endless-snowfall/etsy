@@ -97,6 +97,7 @@ As part of your assignment, please answer these questions:
 | Concept | Reasoning |
 | ------- | --------- |
 | Person | I wanted to create this wrapping on a String to give some domain terminology in the code and to avoid the confusion involved with passing primitive Strings around. |
+| Cycle | I wanted to support cycles in the graph and decided to model a concept of a "Cycle Clout" as the People that are in the cycle have a very interesting property of having the same Clout value. |
 | User Interface | I wanted to both have a Command Line Interface and a way to pump in an input file and generate an output file so I wouldn't have to type every line out against a prompt. |
 | Clout Service | I created this interface since there could be different approaches and internal representations of the clout graph.  This interface defines a contract which alternative implementations must adhere to. |
 | Response | At first when I didn't have this concept, I printed the console output inside the Command layer.  I could have probably mocked something to assert on but decided to wrap the actual Strings in this concept so that I could more explicitly assert against them in my unit tests. |
