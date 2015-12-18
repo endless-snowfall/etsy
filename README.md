@@ -151,11 +151,7 @@ As part of your assignment, please answer these questions:
     2. To a different Tree Component that is connected to a Cycle
       - Bounded by path from the target to the first node that is part of the cycle.
     3. To the same Tree Component (creating a Cycle)
-      - O(3C), as we are creating a cycle we did one pass that needs to be "corrected" by a second pass.
-
-##Overall:
-  - Space: 
-  - Time: 
+      - O(2C), as we are creating a cycle we did one pass that needs to be "corrected" by a second pass.
 
 # Tags: Graphs, Directed Pseudoforests, Corrective Pass, Cycles
 
