@@ -125,15 +125,27 @@ As part of your assignment, please answer these questions:
 # Approach:
   - I wanted my code to be as performant as possible and I was willing to use/tradeoff more memory for the internal representation of the graph details to optimize for better runtime.
   - I also wanted to support cycles since I found that to be the most interesting part of this problem.  In particular, the creation of cycles and the breaking of cycles are the non-trivial scenarios.
+  - In term of structural awareness, my implementation of the CloutService will be aware of the following:
+    1. The edges between each "follower" and who they are "following".
+    2. All of the cycles that exist in the graph.
+    3. All of the people that are part of a cycle.
+    4. The Non-cycle Clout for every Person, where for a Person that is not part of a cycle, it is simply their Clout.  And for a Person that is in a cycle, it would be their Clout if they were detached from that cycle.
   
 # Runtime Analysis:
 ##Definitions:
   - N is the number of people in the entire Clout graph.
   - C is the number of people in a cycle if it's relevant.
-  - H is the number of "ancestors" of a specific person, where if the entire graph represents "Anthony follows Steve" then Anthony has 1 ancestor and Steve has none.
+  - A is the number of "ancestors" of a specific person, where if the entire graph represents "Anthony follows Steve" then Anthony has 1 ancestor and Steve has none.
 
 ##Breakdown:
-  - 
+  1. Removing an Edge
+    1. From a Tree Component
+    2. From a Tree Component that is connected to a Cycle
+    3. From a Cycle itself
+  2. Adding an Edge
+    1. To a different Tree Component
+    2. To a different Tree Component that is connected to a Cycle
+    3. To the same Tree Component (creating a Cycle)
 
 ##Overall:
   - Space: 
