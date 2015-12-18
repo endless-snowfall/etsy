@@ -125,17 +125,14 @@ public class CloutServiceImpl implements CloutService {
 
     private void createCycleAndCorrectCycleClout(Person start, int cycleClout) {
         List<Person> people = new LinkedList<>();
+        Cycle cycle = new Cycle(cycleClout, people);
         Person current = start;
 
         while (follows.get(current) != start) {
             people.add(current);
             nonCycleClout.put(current, nonCycleClout.get(current) - cycleClout);
+            cycles.put(current, cycle);
             current = follows.get(current);
-        }
-
-        Cycle cycle = new Cycle(cycleClout, people);
-        for (Person person : cycle.getPeople()) {
-            cycles.put(person, cycle);
         }
     }
 }
