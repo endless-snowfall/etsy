@@ -97,14 +97,16 @@ As part of your assignment, please answer these questions:
 | Concept | Reasoning |
 | ------- | --------- |
 | Person | I wanted to create this wrapping on a String to give some domain terminology in the code and to avoid the confusion involved with passing primitive Strings around. |
+| Cycle and Non-Cycle Clout | After analyzing the nature of how the graph and components can evolve, these two emerging concepts seems to become more relevant and so I've adopted them in my abstraction of the problem.  They are defined in the "Approach" section. |
 | Cycle | I wanted to support cycles in the graph and decided to model a concept of a "Cycle Clout" as the People that are in the cycle have a very interesting property of having the same Clout value. |
 | User Interface | I wanted to both have a Command Line Interface and a way to pump in an input file and generate an output file so I wouldn't have to type every line out against a prompt. |
 | Clout Service | I created this interface since there could be different approaches and internal representations of the clout graph.  This interface defines a contract which alternative implementations must adhere to. |
 | Response | At first when I didn't have this concept, I printed the console output inside the Command layer.  I could have probably mocked something to assert on but decided to wrap the actual Strings in this concept so that I could more explicitly assert against them in my unit tests. |
-| Command Pattern | I've never used this pattern before and though it would fit the problem as there are intuitively a Follow and a Clout command.  I also added an Exit command for a way to exit the Command Line Interface. I decided to not utilize a Command Invoker abstraction which I found used in some examples of this pattern because it seemed like a redundant layer of abstraction. |
-| Factory Pattern | Where appropriate I've used this pattern to decouple the construction knowledge and also to isolate that logic for unit testing, which has been omitted. |
+| Command Pattern | I've never used this pattern before and though it would fit the problem as there are intuitively a Follow and a Clout command.  I also added an Exit command for a way to exit the Command Line Interface. I decided to not utilize a CommandInvoker abstraction which I found used in some examples of this pattern because it seemed like a redundant layer of abstraction. |
+| Factory Pattern | Where appropriate I've used this pattern to decouple the construction knowledge and also to isolate that logic for unit testing, which has been omitted for the UserInterfaceFactory. |
 | Optionals | I've used Optionals in some places, for example in the CloutCommand, because it was a clean way to differentiate between a Clout Command for a single Person versus everybody. |
-| Integration Testing | I wanted to separate the unit testing from more complex scenarios which were integration-level testing. There are a number of interesting and important test cases relating to cycles that I wanted to ensure my code supported. |
+| Integration Testing | I wanted to separate the unit testing from more complex scenarios which were integration-level testing. There are a number of interesting and important test cases relating to cycles that I wanted to ensure my code supported. In addition I also created a TestUtils class to encapsulate some repeatedly used entities and to create "known" graph components. |
+| Code Generation | Although somewhat controversial, I've used Lombok in the past and it's worked great.  If the reader is not aware of it I would hope that they would agree that it does help to keep the code base concise. Although not being familiar with it can make reading the code harder. |
 
 ### Guidelines
 
@@ -118,8 +120,9 @@ As part of your assignment, please answer these questions:
 
 # Assumptions:
 * It's stated above, but that I would be able to hold the entire graph in memory.
-* That cycles can exist, specifically, if Anthony follows Steve and Steve follows Anthony then each Person has a Clout of 1.
-* Names are case sensitive and spaces are supported.
+* That cycles can exist, specifically, if "Anthony follows Steve" and "Steve follows Anthony" then each Person has a Clout of 1.
+* Names are case sensitive.
+* Whitespace surrounding and encapsulated by names are retained.
 * Empty or null names are not supported.
 
 # Running the Program:
