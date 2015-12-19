@@ -107,6 +107,7 @@ As part of your assignment, please answer these questions:
 | Optionals | I've used Optionals in some places, for example in the CloutCommand, because it was a clean way to differentiate between a Clout Command for a single Person versus everybody. |
 | Integration Testing | I wanted to separate the unit testing from more complex scenarios which were integration-level testing. There are a number of interesting and important test cases relating to cycles that I wanted to ensure my code supported. In addition I also created a TestUtils class to encapsulate some repeatedly used entities and to create "known" graph components. |
 | Code Generation | Although somewhat controversial, I've used Lombok in the past and it's worked great.  If the reader is not aware of it I would hope that they would agree that it does help to keep the code base concise. Although not being familiar with it can make reading the code harder. |
+| Defensive Copy | I construct a new Map when responding to the Clout (for everybody) command since I don't want to expose a reference to the underlying data. |
 
 ### Guidelines
 
@@ -150,20 +151,24 @@ There are two scripts available to run the program from inside the "scripts" fol
 
 ##Breakdown:
   1. Removing an Edge
-    - Edge removal currently requires a cycle detection pass which can take up to O(A) from the target time and space.  Please add this cost to the runtimes below.
     1. From a Tree Component
-      - O(A) from the target
+      - Runtime: O(A) from the target.
+      - Space: Nothing additional.
     2. From a Tree Component that is connected to a Cycle
-      - Bounded by path from the target to the first node that is part of the cycle.
-    3. From a Cycle itself
-      - O(2C), as we are breaking the cycle we need to remove the "cycles" map entries as well as correct the non-cycle clout for each member of the former cycle.
+      - Runtime: Bounded by path from the target to the first node that is part of the cycle.
+      - Space: Nothing additional.
+    3. From a Cycle itself (Breaking a Cycle)
+      - Runtime: O(C) as we naturally do one pass to rebuild the resulting Tree's clout.
+      - Space: Nothing additional.
   2. Adding an Edge
     1. To a different Tree Component
-      - O(A) from the target
+      - Runtime: O(A) from the target.
+      - Space: Nothing additional.
     2. To a different Tree Component that is connected to a Cycle
-      - Bounded by path from the target to the first node that is part of the cycle.
-    3. To the same Tree Component (creating a Cycle)
-      - O(2C), as we are creating a cycle we did one pass that needs to be "corrected" by a second pass.
+      - Runtime: Bounded by path from the target to the first node that is part of the cycle.
+      - Space: Nothing additional.
+    3. To the same Tree Component (Creating a Cycle)
+      - Runtime: O(2C), as we are creating a cycle we did one pass that needs to be "corrected" by a second pass.
 
 # Tags: Graphs, Directed Pseudoforests, Corrective Pass, Cycles
 
