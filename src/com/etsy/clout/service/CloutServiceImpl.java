@@ -1,11 +1,9 @@
 package com.etsy.clout.service;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.etsy.clout.concepts.Cycle;
 import com.etsy.clout.concepts.Person;
@@ -97,25 +95,16 @@ public class CloutServiceImpl implements CloutService {
     private void addEdge(Person source, Person target) {
         nonCycleClout.putIfAbsent(source, 0);
         int sourceClout = nonCycleClout.get(source);
-
-        if (willCreateCycle(source, target)) {
-            createCycle(target, sourceClout);
-            follows.put(source, target);
-            return;
-        }
-
         int cloutToAdd = sourceClout + 1;
         Person current = target;
 
         while (current != null) {
-
-            // if (current == source) {
-            // createCycle(target, sourceClout);
-            // follows.put(source, target);
-            // break;
-            // }
-
             nonCycleClout.put(current, nonCycleClout.getOrDefault(current, 0) + cloutToAdd);
+
+            if (current == source) {
+                createCycle(target, sourceClout, cloutToAdd);
+                break;
+            }
 
             if (cycles.containsKey(current)) {
                 Cycle cycle = cycles.get(current);
@@ -129,39 +118,20 @@ public class CloutServiceImpl implements CloutService {
         follows.put(source, target);
     }
 
-    private void createCycle(Person start, int cycleClout) {
+    private void createCycle(Person target, int cycleClout, int cloutAdded) {
         List<Person> people = new LinkedList<>();
         Cycle cycle = new Cycle(cycleClout, people);
-        Person current = start;
+        Person current = target;
         int accumulatedClout = 0;
 
         while (current != null) {
             people.add(current);
             int nonCycleCloutValue = nonCycleClout.get(current);
-            nonCycleClout.put(current, nonCycleCloutValue - accumulatedClout);
-            accumulatedClout = nonCycleCloutValue + 1;
+            int newNonCycleClout = nonCycleCloutValue - cloutAdded - accumulatedClout;
+            nonCycleClout.put(current, newNonCycleClout);
+            accumulatedClout += newNonCycleClout + 1;
             cycles.put(current, cycle);
             current = follows.get(current);
         }
-    }
-
-    private boolean willCreateCycle(Person start, Person target) {
-        Set<Person> seen = new HashSet<>();
-        Person current = target;
-
-        while (current != null) {
-            if (follows.get(current) == start) {
-                return true;
-            }
-
-            if (seen.contains(current)) {
-                return false;
-            }
-
-            seen.add(current);
-            current = follows.get(current);
-        }
-
-        return false;
     }
 }
