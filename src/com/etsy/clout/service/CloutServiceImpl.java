@@ -65,18 +65,15 @@ public class CloutServiceImpl implements CloutService {
     }
 
     private void removeCycleEdge(Person target) {
-        Cycle cycle = cycles.get(target);
-
-        int startIndex = cycle.getPeople().indexOf(target);
-        int cycleLength = cycle.getPeople().size();
+        Person current = target;
         int accumulatedClout = 0;
 
-        for (int i = 0; i < cycleLength; i++) {
-            Person person = cycle.getPeople().get((i + startIndex) % cycleLength);
-            cycles.remove(person);
-            int nonCycleCloutValue = nonCycleClout.get(person);
-            nonCycleClout.put(person, nonCycleCloutValue + accumulatedClout);
+        while (current != null) {
+            cycles.remove(current);
+            int nonCycleCloutValue = nonCycleClout.get(current);
+            nonCycleClout.put(current, nonCycleCloutValue + accumulatedClout);
             accumulatedClout += nonCycleCloutValue + 1;
+            current = follows.get(current);
         }
     }
 
@@ -111,6 +108,13 @@ public class CloutServiceImpl implements CloutService {
         Person current = target;
 
         while (current != null) {
+
+            // if (current == source) {
+            // createCycle(target, sourceClout);
+            // follows.put(source, target);
+            // break;
+            // }
+
             nonCycleClout.put(current, nonCycleClout.getOrDefault(current, 0) + cloutToAdd);
 
             if (cycles.containsKey(current)) {
@@ -121,6 +125,7 @@ public class CloutServiceImpl implements CloutService {
 
             current = follows.get(current);
         }
+
         follows.put(source, target);
     }
 
