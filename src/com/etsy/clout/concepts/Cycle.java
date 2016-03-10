@@ -2,16 +2,13 @@ package com.etsy.clout.concepts;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
+import lombok.Value;
+import lombok.experimental.NonFinal;
 
-@AllArgsConstructor
-@ToString
-@Getter
+@Value
 public class Cycle {
 
-    @Setter private int cycleClout;
+    @Setter @NonFinal private int cycleClout;
     private List<Person> people;
 }
